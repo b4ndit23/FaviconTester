@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Favicon tool: normalize names, generate 16×16/32×32, refresh HTML.
-# Usage: ./run.sh [--check] [--force]
-#   --check   Only regenerate if source is newer than generated files (quick refresh).
-#   --force   Regenerate all sizes and HTML regardless of timestamps.
+# Usage: ./run.sh [--check] [--force] [--clean] [--clean-all]
+#   --check     Only regenerate if source is newer than generated files (quick refresh).
+#   --force     Regenerate all sizes and HTML regardless of timestamps.
+#   --clean     Remove only generated files (-16x16.png, -32x32.png). Keeps source assets.
+#   --clean-all Remove all favicon-* images (sources + generated). Empty the assets folder.
 # Drop images into this directory (with or without "favicon-" prefix), then run.
 
 set -e
@@ -11,12 +13,43 @@ cd "$SCRIPT_DIR"
 
 FORCE=false
 CHECK=false
+CLEAN=false
+CLEAN_ALL=false
 for arg in "$@"; do
   case "$arg" in
     --force) FORCE=true ;;
     --check) CHECK=true ;;
+    --clean) CLEAN=true ;;
+    --clean-all) CLEAN_ALL=true ;;
   esac
 done
+
+# Cleanup only, then exit
+if [[ "$CLEAN_ALL" == true ]]; then
+  echo "Removing all favicon assets and generated files..."
+  for ext in png jpg jpeg webp; do
+    for f in favicon-*."$ext"; do
+      [[ -f "$f" ]] || continue
+      rm -v "$f"
+    done
+  done
+  for f in *-16x16.png *-32x32.png; do
+    [[ -f "$f" ]] && rm -v "$f"
+  done
+  [[ -f "favicon-tester.html" ]] && rm -v "favicon-tester.html"
+  echo "Done. Folder has no assets. Add images and run ./run.sh again."
+  exit 0
+fi
+
+if [[ "$CLEAN" == true ]]; then
+  echo "Removing generated files (-16x16.png, -32x32.png)..."
+  for f in *-16x16.png *-32x32.png; do
+    [[ -f "$f" ]] || continue
+    rm -v "$f"
+  done
+  echo "Done. Run ./run.sh to regenerate."
+  exit 0
+fi
 
 # Image extensions we process
 EXTS="png jpg jpeg webp"
