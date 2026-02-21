@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favicon Tester</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-asasas-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-asasas-16x16.png">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 2rem; background: #1a1a2e; color: #eaeaea; min-height: 100vh; }
+        h1 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .sub { color: #888; font-size: 0.9rem; margin-bottom: 2rem; }
+        .assets-section { margin-bottom: 2rem; }
+        .assets-section h2 { font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem; color: #ccc; }
+        .asset-list { display: flex; flex-direction: column; gap: 0; }
+        .asset-row {
+            display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem;
+            background: #16213e; border-bottom: 1px solid #2a2a4a; flex-wrap: wrap;
+        }
+        .asset-row:last-of-type { border-bottom: none; }
+        .asset-name { font-size: 0.8rem; color: #aaa; min-width: 140px; word-break: break-all; }
+        .asset-row .sizes { display: flex; align-items: center; gap: 0.75rem; flex-wrap: nowrap; }
+        .asset-row .size-cell {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            background: #0f0f1a; border-radius: 6px; padding: 0.35rem;
+            image-rendering: pixelated; image-rendering: crisp-edges;
+        }
+        .asset-row .size-cell .label { font-size: 0.65rem; color: #666; }
+        .asset-row .size-cell img { display: block; vertical-align: bottom; }
+        .asset-row .actions { display: flex; gap: 0.5rem; margin-left: auto; flex-shrink: 0; }
+        .asset-row .actions button { font-size: 0.7rem; padding: 0.3rem 0.5rem; background: #2a2a4a; color: #eaeaea; border: none; border-radius: 6px; cursor: pointer; }
+        .asset-row .actions button:hover { background: #3a3a5a; }
+        .asset-row .actions button.dl { background: #1a3a2a; }
+        .asset-row .actions button.dl:hover { background: #2a4a3a; }
+        .actual-tab-section { margin-bottom: 2rem; padding-top: 1rem; border-top: 1px solid #2a2a4a; }
+        .actual-tab-section h2 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #ccc; }
+        .actual-tab-row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .actual-size-box { width: 16px; height: 16px; flex-shrink: 0; overflow: hidden; background: #0f0f1a; image-rendering: pixelated; image-rendering: crisp-edges; }
+        .actual-size-box img { display: block; width: 16px; height: 16px; }
+        .zoomed-box { width: 128px; height: 128px; flex-shrink: 0; overflow: hidden; background: #0f0f1a; border-radius: 8px; image-rendering: pixelated; image-rendering: crisp-edges; }
+        .zoomed-box img { display: block; width: 128px; height: 128px; }
+        .actual-tab-label { font-size: 0.8rem; color: #888; }
+        .note { max-width: 560px; font-size: 0.85rem; color: #888; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <h1>Favicon Tester</h1>
+    <p class="sub">Drop images in this folder, run <code>./run.sh</code> (or <code>./run.sh --check</code> for quick refresh). Each row = one asset.</p>
+
+    <section class="assets-section" aria-label="All assets">
+        <h2>All assets — one row each, 4 sizes (16 → 32 → 48 → 64). Scroll down as you add more.</h2>
+        <div class="asset-list">
+
+            <div class="asset-row" data-asset-src="favicon-asasas.png">
+                <span class="asset-name">favicon-asasas.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-asasas-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-asasas-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-asasas-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-asasas.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-as.png">
+                <span class="asset-name">favicon-as.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-as-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-as-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-as-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-as.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-azul.png">
+                <span class="asset-name">favicon-azul.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-azul-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-azul-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-azul-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-azul.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-rojo.png">
+                <span class="asset-name">favicon-rojo.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-rojo-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-rojo-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-rojo-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-rojo.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-01.png">
+                <span class="asset-name">favicon-test-01.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-01-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-01-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-01-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-01.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-02.png">
+                <span class="asset-name">favicon-test-02.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-02-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-02-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-02-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-02.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-03.png">
+                <span class="asset-name">favicon-test-03.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-03-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-03-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-03-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-03.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-04.png">
+                <span class="asset-name">favicon-test-04.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-04-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-04-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-04-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-04.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-05.png">
+                <span class="asset-name">favicon-test-05.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-05-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-05-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-05-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-05.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-06.png">
+                <span class="asset-name">favicon-test-06.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-06-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-06-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-06-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-06.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-07.png">
+                <span class="asset-name">favicon-test-07.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-07-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-07-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-07-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-07.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-08.png">
+                <span class="asset-name">favicon-test-08.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-08-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-08-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-08-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-08.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-09.png">
+                <span class="asset-name">favicon-test-09.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-09-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-09-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-09-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-09.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-10.png">
+                <span class="asset-name">favicon-test-10.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-10-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-10-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-10-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-10.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-11.png">
+                <span class="asset-name">favicon-test-11.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-11-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-11-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-11-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-11.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-12.png">
+                <span class="asset-name">favicon-test-12.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-12-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-12-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-12-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-12.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-13.png">
+                <span class="asset-name">favicon-test-13.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-13-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-13-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-13-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-13.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-14.png">
+                <span class="asset-name">favicon-test-14.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-14-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-14-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-14-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-14.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-15.png">
+                <span class="asset-name">favicon-test-15.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-15-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-15-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-15-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-15.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-16.png">
+                <span class="asset-name">favicon-test-16.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-16-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-16-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-16-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-16.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-17.png">
+                <span class="asset-name">favicon-test-17.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-17-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-17-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-17-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-17.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-18.png">
+                <span class="asset-name">favicon-test-18.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-18-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-18-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-18-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-18.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-19.png">
+                <span class="asset-name">favicon-test-19.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-19-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-19-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-19-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-19.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-20.png">
+                <span class="asset-name">favicon-test-20.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-20-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-20-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-20-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-20.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-21.png">
+                <span class="asset-name">favicon-test-21.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-21-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-21-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-21-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-21.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-22.png">
+                <span class="asset-name">favicon-test-22.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-22-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-22-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-22-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-22.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-23.png">
+                <span class="asset-name">favicon-test-23.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-23-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-23-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-23-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-23.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-24.png">
+                <span class="asset-name">favicon-test-24.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-24-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-24-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-24-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-24.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-src="favicon-test-25.png">
+                <span class="asset-name">favicon-test-25.png</span>
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img src="favicon-test-25-16x16.png" alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img src="favicon-test-25-32x32.png" alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img src="favicon-test-25-32x32.png" alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img src="favicon-test-25.png" alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab">Use as tab</button>
+                    <button type="button" class="dl dl-16">Download 16×16</button>
+                    <button type="button" class="dl dl-32">Download 32×32</button>
+                </div>
+            </div>
+            <div class="asset-row" data-asset-file>
+                <span class="asset-name">Add another (choose file)</span>
+                <input type="file" accept="image/*" class="third-file" style="font-size: 0.75rem;">
+                <div class="sizes">
+                    <div class="size-cell"><span class="label">16</span><img alt="" width="16" height="16"></div>
+                    <div class="size-cell"><span class="label">32</span><img alt="" width="32" height="32"></div>
+                    <div class="size-cell"><span class="label">48</span><img alt="" width="48" height="48"></div>
+                    <div class="size-cell"><span class="label">64</span><img alt="" width="64" height="64"></div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="use-tab" disabled>Use as tab</button>
+                    <button type="button" class="dl dl-16" disabled>Download 16×16</button>
+                    <button type="button" class="dl dl-32" disabled>Download 32×32</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="actual-tab-section" aria-label="Actual tab size">
+        <h2>Exactly as in browser tab (16×16 px)</h2>
+        <div class="actual-tab-row">
+            <div class="actual-size-box" title="Real tab size"><img id="tab-actual-16" src="favicon-asasas-16x16.png" alt="" width="16" height="16"></div>
+            <div class="zoomed-box" title="8× zoom"><img id="tab-zoomed-16" src="favicon-asasas-16x16.png" alt="" width="128" height="128"></div>
+            <span class="actual-tab-label">Left = real tab size · Right = 8× zoom</span>
+        </div>
+    </section>
+
+    <p class="note">Use “Use as tab” on any asset above to see it in the tab. “Download 16×16” / “Download 32×32” save that asset’s sizes. Reload after running <code>./run.sh</code> to see new assets.</p>
+
+    <script>
+        var q = '?t=' + Date.now();
+        (function () {
+            document.querySelectorAll('link[rel="icon"]').forEach(function (link) {
+                var h = link.getAttribute('href');
+                if (h && h.indexOf('?') === -1) link.setAttribute('href', h + q);
+            });
+            var tabActual = document.getElementById('tab-actual-16');
+            var tabZoomed = document.getElementById('tab-zoomed-16');
+            if (tabActual && tabZoomed) {
+                if (tabActual.src && tabActual.src.indexOf('?') === -1) { tabActual.src += q; tabZoomed.src = tabActual.src; }
+            }
+            document.querySelectorAll('.asset-row[data-asset-src] .size-cell img').forEach(function (img) {
+                var s = img.getAttribute('src');
+                if (s && s.indexOf('?') === -1) img.setAttribute('src', s + q);
+            });
+        })();
+
+        function scaleToDataUrl(img, w, h) {
+            var c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            var ctx = c.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(img, 0, 0, w, h);
+            return c.toDataURL('image/png');
+        }
+
+        function fillRow(row, data16, data32) {
+            row._data16 = data16;
+            row._data32 = data32;
+            row.querySelectorAll('.use-tab, .dl-16, .dl-32').forEach(function (b) { b.disabled = false; });
+        }
+
+        function bindRow(row) {
+            var useTab = row.querySelector('.use-tab');
+            var dl16 = row.querySelector('.dl-16');
+            var dl32 = row.querySelector('.dl-32');
+            if (useTab) useTab.addEventListener('click', function () {
+                if (!row._data16) return;
+                var link = document.querySelector('link[rel="icon"]') || document.createElement('link');
+                link.rel = 'icon';
+                link.href = row._data16;
+                if (!link.parentNode) document.head.appendChild(link);
+            });
+            if (dl16) dl16.addEventListener('click', function () {
+                if (!row._data16) return;
+                var a = document.createElement('a');
+                a.href = row._data16;
+                a.download = 'favicon-16x16.png';
+                a.click();
+            });
+            if (dl32) dl32.addEventListener('click', function () {
+                if (!row._data32) return;
+                var a = document.createElement('a');
+                a.href = row._data32;
+                a.download = 'favicon-32x32.png';
+                a.click();
+            });
+        }
+
+        document.querySelectorAll('.asset-row[data-asset-src]').forEach(function (row) {
+            bindRow(row);
+            var src = row.getAttribute('data-asset-src') + q;
+            var img = new Image();
+            img.onload = function () { fillRow(row, scaleToDataUrl(img, 16, 16), scaleToDataUrl(img, 32, 32)); };
+            img.onerror = function () { row.querySelector('.asset-name').textContent += ' (load failed)'; };
+            img.src = src;
+        });
+
+        var addRow = document.querySelector('.asset-row[data-asset-file]');
+        if (addRow) {
+            bindRow(addRow);
+            addRow.querySelector('.third-file').addEventListener('change', function () {
+                var file = this.files && this.files[0];
+                if (!file) return;
+                var url = URL.createObjectURL(file);
+                var img = new Image();
+                img.onload = function () {
+                    fillRow(addRow, scaleToDataUrl(img, 16, 16), scaleToDataUrl(img, 32, 32));
+                    addRow.querySelector('.asset-name').textContent = file.name;
+                    var cells = addRow.querySelectorAll('.size-cell img');
+                    var d16 = scaleToDataUrl(img, 16, 16);
+                    var d32 = scaleToDataUrl(img, 32, 32);
+                    if (cells[0]) cells[0].src = d16;
+                    if (cells[1]) cells[1].src = d32;
+                    if (cells[2]) cells[2].src = d32;
+                    if (cells[3]) cells[3].src = scaleToDataUrl(img, 64, 64);
+                    URL.revokeObjectURL(url);
+                };
+                img.onerror = function () { URL.revokeObjectURL(url); };
+                img.src = url;
+            });
+        }
+    </script>
+</body>
+</html>
