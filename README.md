@@ -1,23 +1,27 @@
 # Favicon tool
 
-Drop image files into **this directory**, run the script, then open **`favicon-tester.html`** (the one in this folder) in your browser. You get one row per asset with four size previews (16 → 32 → 48 → 64); scroll down as you add more.
+One Python script: drop image or SVG files in **this folder**, run it, then open **`favicon-tester.html`** in the browser. One row per asset (4 sizes: 16 → 32 → 48 → 64); scroll as you add more.
+
+**Delete:** If you open the HTML by double-clicking (file://), Delete only removes the row and copies a command — paste it in a terminal to delete the file. To have Delete **remove the file from disk** when you click it, run **`python3 favicon_tool.py --serve`** and open **http://127.0.0.1:8765/favicon-tester.html** in the browser.
 
 ## Usage
 
 ```bash
-./run.sh            # Full run: rename non-favicon-* files, generate 16×16 & 32×32, refresh HTML
-./run.sh --check    # Quick refresh: only regenerate if source is newer than generated files
-./run.sh --force    # Regenerate all sizes and HTML regardless of timestamps
-./run.sh --clean    # Remove only generated files (-16x16, -32x32). Keeps source assets.
-./run.sh --clean-all # Remove all favicon-* images (sources + generated). Empty the folder.
+python3 favicon_tool.py              # Generate favicon-tester.html
+python3 favicon_tool.py --check      # Only regenerate if source is newer
+python3 favicon_tool.py --force      # Regenerate all
+python3 favicon_tool.py --clean      # Remove only -16x16/-32x32
+python3 favicon_tool.py --clean-all  # Remove all favicon-* assets
+python3 favicon_tool.py --delete F   # Delete one asset, then regenerate
+python3 favicon_tool.py --serve      # Generate, then serve at http://127.0.0.1:8765 — Delete removes files
 ```
 
-## What the script does
+## What it does
 
-1. **Names** – Any image that doesn’t start with `favicon-` is renamed to `favicon-test-01.png` (or `.jpg` etc.). If that exists, `favicon-test-02.png`, and so on.
-2. **Generates** – For each `favicon-*.png` (or jpg/webp), creates `favicon-<name>-16x16.png` and `favicon-<name>-32x32.png` in the same folder.
-3. **HTML** – Writes `favicon-tester.html` with one row per asset (4 sizes: 16, 32, 48, 64 px), plus “Use as tab” and “Download 16×16” / “Download 32×32”. Open **this folder’s** `favicon-tester.html` in the browser (not a copy in another directory).
+1. **Names** – Files not starting with `favicon-` are renamed to `favicon-test-01`, `favicon-test-02`, etc.
+2. **Generates** – For each raster (png/jpg/webp), creates `-16x16.png` and `-32x32.png`. SVG is shown as-is (no resize).
+3. **HTML** – Writes `favicon-tester.html` with one row per asset and “Use as tab” / “Download” / “Delete”.
 
 ## Requirements
 
-ImageMagick (`magick`) or GraphicsMagick (`gm`) for resizing.
+**Pillow** (`pip install Pillow`) for resizing. If missing, the script tries ImageMagick (`magick`) or GraphicsMagick (`gm`).
