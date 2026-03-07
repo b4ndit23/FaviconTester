@@ -1,3 +1,4 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J41UVIX7)
 # Favicon tool
 
 One Python script: drop image or SVG files in **this folder**, run it, then open **`favicon-tester.html`** in the browser. One row per asset (4 sizes: 16 → 32 → 48 → 64); scroll as you add more.
